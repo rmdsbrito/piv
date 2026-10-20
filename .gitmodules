@@ -1,0 +1,3 @@
+[submodule "external/VisionIST_matlab"]
+	path = external/VisionIST_matlab
+	url = git@github.com:sipg-isr/VisionIST_matlab.git
