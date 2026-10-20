@@ -1,0 +1,6 @@
+data/
+*.mat
+*.asv
+*.mex*
+output/
+features/
