@@ -16,26 +16,48 @@
 
 
 
-function [H, inliers] = RANSAC(it_max, matches, limiar_coli)
+function [H, inliers] = RANSAC(it_max, matches, limiar_coli, limiar_ransac, nsuf_inliers)
     samples = 4;
     n_samples = size(matches,1);
-    
-    for i=1:N
+    v_inliers = zeros(it_max);
+    v_H = zeros(it_max);
+
+    for i=1:it_max
         choices = randperm(n_samples, samples); % Random com permutações que não usa as que já usou
         matches_i = matches(choices,:);
         notmatches_i = matches(setdiff(1:size(matches,1), choices), :);
 
         % Teste de quasi-colinearidade
         if is_degenerate(matches_i, limiar_coli)
-            break;
+            continue;
         end
 
         % Computação da homography
         H_i = normalization_homography(matches_i(:,1:2), matches_i(:,3:4));
+
+
+        pts1 = matches(:,1:2); % referencia
+        pts2 = matches(:,3:4);
+        hpts2 = [pts2, ones(n_samples,1)]';
+        hpts_est = H_i*hpts2;
+        pts_est = [hpts_est(1,j)/ hpts_est(3,j)  hpts_est(2,j)/hpts_est(3,j)];
+        inl = 0;
         
-
-
+        for j=1:n_samples
+            err = sqrt((pts1(1) - pts_est(1))^2+((pts1(j,2) - pts_est(j,2))^2));
+            if err < limiar_ransac 
+                inl = inl + 1;
+            end
+            if inl >= nsuf_inliers
+                break;
+            end
+            
+        end
+        v_inliers(i) = inl;
+        v_H(i) = H_i;
     end
+    inliers = max(v_inliers);
+    H = max(v_H);
 end
 
 % O critério escolhido para avaliar a colinearidade entre 3 pontos da
