@@ -19,9 +19,16 @@
 function [H, inliers] = RANSAC(it_max, matches, limiar_coli, limiar_inliers, nsuf_inliers)
     samples = 4;
     N = size(matches,1);
+
+    % Variáveis para guardar os melhores dados 
     best_n    = 0;
     best_mask = false(N, 1);
     best_H    = [];
+    
+    % Calculos necessários para o cálculo do número de inliers
+    pts_dst = matches(:,1:2); % referencia
+    pts_src = matches(:,3:4);
+    h_src = [pts_src, ones(N,1)]';
 
     for i=1:it_max
         choices = randperm(N, samples); % Random com permutações que não usa as que já usou
@@ -36,20 +43,18 @@ function [H, inliers] = RANSAC(it_max, matches, limiar_coli, limiar_inliers, nsu
         H_i = normalization_homography(matches_i(:,1:2), matches_i(:,3:4));
 
         % Calculo do numero de inliers que cada H_i tem nas várias matches
-        pts_dst = matches(:,1:2); % referencia
-        pts_src = matches(:,3:4);
-        h_src = [pts_src, ones(N,1)]';
         h_est = H_i*h_src;
         pts_est = (h_est(1:2,:) ./ h_est(3, :))';
-        err = sqrt(sum((pts_dest-pts_est)^2,2));
+        err = sqrt( sum((pts_dst - pts_est).^2, 2) );
         mask = err < limiar_inliers;
         
         n = sum(mask); % Numero de inliers
         if n > best_n
             best_n    = n;
             best_mask = mask;
-            best_H    = H;
+            best_H    = H_i;
         end
+
         if best_n >= nsuf_inliers
             break; %quebra o ciclo for
         end
