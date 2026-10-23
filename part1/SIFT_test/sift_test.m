@@ -89,6 +89,6 @@ for i = 1:size(pts_a, 1)
     plot(xb, yb, 'ro', 'MarkerSize', 3, 'MarkerFaceColor', 'r');
 end
 hold off;
-w
+
 saveas(gcf, 'matches.jpg');
 disp("Imagem gravada com sucesso.")
