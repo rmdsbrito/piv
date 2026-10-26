@@ -39,7 +39,7 @@ for k = 1:numel(homog_files)
     H = data.H;
 
     % homography_NNNN.mat corresponde a somename_NNNN.jpg
-    [~, h_name] = fileparts(hom_files(k).name);
+    [~, h_name] = fileparts(homog_files(k).name);
     frame_num_str = extractAfter(h_name, 'homography_');
 
     % Procurar a imagem correspondente na pasta de imagens
