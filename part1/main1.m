@@ -20,6 +20,8 @@ function main1(path_to_refdir, path_images_dir, path_feature_dir, path_output_di
 
     % --- Configuração do VisionIST (Porta 9071 - features, mais rápida que a 9065) ---
     cfg = vsConfig();
+
+    % Configuração da box (específica da tua máquina) - mudar aqui
     cfg.python = '"C:\Users\José Bernardo\AppData\Local\Python\pythoncore-3.14-64\python.exe"';
     cfg.hosts.features = "127.0.0.1:9071";
     cfg.verbose = 0; % Evita que cada iteração seja impressa
