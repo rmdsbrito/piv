@@ -64,8 +64,8 @@ function part1(path_to_refdir, path_images_dir, path_feature_dir, path_output_di
     end
 end
 
-function [kp] = load_entry(entry)
+function [keypoints] = load_entry(entry)
     entry_path = fullfile(entry.folder, entry.name);
     s = load(entry_path);
-    kp = s.kp;
+    keypoints = s.keypoints;
 end
