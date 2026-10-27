@@ -16,7 +16,7 @@ main1(path_to_refdir, path_images_dir, path_feature_dir, path_output_dir);
 
 %% Visualização
 
-% 1. Carregar a imagem de referência
+% Referência
 ref_img_path = fullfile(path_to_refdir, 'templateimg.jpg');
 ref_img = imread(ref_img_path);
 
